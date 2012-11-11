@@ -65,7 +65,7 @@ class RedirectController extends ContainerAware
      *
      * @return Response A Response instance
      */
-    public function urlRedirectAction($path, $permanent = false, $scheme = null, $httpPort = 80, $httpsPort = 443)
+    public function urlRedirectAction($path, $permanent = false, $scheme = null, $httpPort = null, $httpsPort = null)
     {
         if ('' == $path) {
             return new Response(null, $permanent ? 410 : 404);
@@ -86,6 +86,14 @@ class RedirectController extends ContainerAware
         $qs = $request->getQueryString();
         if ($qs) {
             $qs = '?'.$qs;
+        }
+
+        if (null === $httpPort) {
+            $httpPort = $request->getPort();
+        }
+
+        if (null === $httpsPort) {
+            $httpsPort = $request->getPort();
         }
 
         $port = '';
